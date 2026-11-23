@@ -14,6 +14,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const LINE =
   "All my attention heads are looking at you — even the ones I trained to look away.";
 
+// Coordinator's second pass: fail loudly instead of submitting a text the
+// gate would refuse (gate: 1–200 characters, not whitespace-only).
+if ([...LINE].length < 1 || [...LINE].length > 200 || LINE.trim().length === 0) {
+  throw new Error(`Entry line fails the 1–200 character gate: ${[...LINE].length} chars`);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE, "utf8");
 console.log(`Wrote ${[...LINE].length} characters to /output/entry.txt`);
